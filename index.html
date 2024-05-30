@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DIY水印相机</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="./html2canvas.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,7 +12,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 90vh;
+            height: 95vh;
             margin: 0;
             background-color: #f0f0f0;
         }
@@ -62,7 +61,7 @@
         <video id="videoElement" autoplay playsinline></video>
         <img id="imageElement" style="display:none;">
         <div id="watermark">
-            <img src="bj.png" style="position: initial;width: 380px;margin-bottom: -113.3px;margin-left: -15px;">
+            <img src="./static/bj.png" style="position: initial;width: 380px;margin-bottom: -113.3px;margin-left: -15px;">
             <div id="time"></div>
             <div id="watermarkTextb" style="transform: scaleX(0.8);padding-top: 8px;margin-left: -28px;padding-bottom: 2px;letter-spacing: 0.1px;font-weight: bold;">广东省广州市白云区龙井西路4号</div>
             <div id="watermarkTextc" style="padding-bottom: 18px;padding-left: 11px;letter-spacing: 0px;">获取中</div>
@@ -88,46 +87,8 @@
     <p>
         本项目仅供学习参考，请勿非法使用，否则后果自负！
     </p>
-
- 
-    <button id="btnConvert">内容生成为图片</button>
-    <div id="canvasContainer"></div>
-
-
     <script>
         // 在页面加载完毕后执行
-        document.addEventListener("DOMContentLoaded", function() {
-            // 获取要转换的内容的引用
-            var content = document.getElementById("videoContainer");
-            // 获取转换按钮的引用
-            var btnConvert = document.getElementById("btnConvert");
-            // 获取 Canvas 容器的引用
-            var canvasContainer = document.getElementById("canvasContainer");
-
-            // 添加点击事件监听器
-            btnConvert.addEventListener("click", function() {
-                // 使用 html2canvas 库将 content 转换为 Canvas
-                html2canvas(content).then(function(canvas) {
-                    // 清空 Canvas 容器
-                    canvasContainer.innerHTML = "";
-                    // 将生成的 Canvas 添加到容器中
-                    canvasContainer.appendChild(canvas);
-                    // 将 Canvas 转换为图片的数据 URL
-                    //var imageDataURL = canvas.toDataURL("image/png");
-                    // 创建一个链接元素
-                    //var link = document.createElement('a');
-                    //link.download = 'canvas_image.png'; // 设置下载文件名
-                    //link.href = imageDataURL; // 设置链接地址为图片的数据 URL
-                    // 将链接添加到页面上并模拟点击
-                    //document.body.appendChild(link);
-                    //link.click();
-                    // 清理链接元素
-                    //document.body.removeChild(link);
-                });
-            });
-        });
-
-        
         $(document).ready(function () {
             const videoElement = document.getElementById('videoElement');
             const imageElement = document.getElementById('imageElement');
@@ -154,10 +115,6 @@
             $("#watermarkTextc").text(formattedDate);
             $("#watermarkInputb").val('广东省广州市白云区龙井西路4号');
             $("#watermarkInputc").val(formattedDate);
-            
-            
-
-
             
             $('#startCamera').click(function () {
                 $('#imageElement').hide();
@@ -193,6 +150,9 @@
                 $("#fw").text(generateRandomString(14));
             });
 
+            setTimeout(function() {
+                $("#startCamera").click();
+            }, 500);
         });
         function generateRandomString(length) {
             const characters = 'ABCDEFGHIJKMNOPQRSTUVWXYZ0123456789';
