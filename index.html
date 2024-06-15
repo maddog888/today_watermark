@@ -2,32 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=no,minimal-ui"
+    />
     <title>DIY水印相机</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 95vh;
+            height: 115vh;
             margin: 0;
             background-color: #f0f0f0;
         }
         #videoContainer {
             position: relative;
             width: 380px;
-            max-width: 380px;
+            height: 500px; /* Fixed height for video and image */
+            overflow: hidden; /* Hide overflow content */
+            background-color: black;
         }
         #videoElement, #imageElement {
-            width: 100%;
-            height: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%; /* Always take full width */
+            height: auto; /* Adjust height automatically */
+            transform: translate(-50%, -50%);
         }
         #watermark {
             position: absolute;
-            margin-bottom: -10px;
             bottom: 10px;
             left: 10px;
             color: white;
@@ -39,7 +47,6 @@
         }
         #time {
             background: linear-gradient(to bottom, #5798ff, black);
-            /* 添加Mozilla前缀以增强兼容性 */
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -60,11 +67,11 @@
     <div id="videoContainer">
         <video id="videoElement" autoplay playsinline></video>
         <img id="imageElement" style="display:none;">
-        <div id="watermark">
-            <img src="./static/bj.png" style="position: initial;width: 380px;margin-bottom: -113.3px;margin-left: -15px;">
+        <div id="watermark" style="margin-bottom: -16.3px;">
+            <img src="bj.png" style="position: initial;width: 380px;margin-bottom: -113.3px;margin-left: -15px;">
             <div id="time"></div>
-            <div id="watermarkTextb" style="transform: scaleX(0.8);padding-top: 8px;margin-left: -28px;padding-bottom: 2px;letter-spacing: 0.1px;font-weight: bold;">广东省广州市白云区龙井西路4号</div>
-            <div id="watermarkTextc" style="padding-bottom: 18px;padding-left: 11px;letter-spacing: 0px;">获取中</div>
+            <div id="watermarkTextb" style="transform: scaleX(0.9);padding-top: 8px;margin-left: -10px;padding-bottom: 1px;letter-spacing: 0.1px;font-weight: bold;">广东省东莞市虎门镇</div>
+            <div id="watermarkTextc" style="padding-bottom: 19px;padding-left: 10px;letter-spacing: 0px;">获取中</div>
             <div id="fw" style="transform: scaleX(0.8);letter-spacing: 0px;margin-left: 303px;font-size: 6.5px;margin-bottom: 0px;font-weight: bold;margin-top: -1.8px;">获取中</div>
         </div>
     </div>
@@ -79,32 +86,24 @@
         <input type="text" id="watermarkInputb" placeholder="B水印">
         <label for="watermarkInput">C水印:</label>
         <input type="text" id="watermarkInputc" placeholder="C水印">
-
         <button id="updateWatermark">更新水印</button>
     </div>
-
     <br>
-    <p>
-        本项目仅供学习参考，请勿非法使用，否则后果自负！
-    </p>
+    <p>本项目仅供学习参考，请勿非法使用，否则后果自负！</p>
     <script>
-        // 在页面加载完毕后执行
         $(document).ready(function () {
             const videoElement = document.getElementById('videoElement');
             const imageElement = document.getElementById('imageElement');
             const watermarka = document.getElementById('time');
             const watermarkb = document.getElementById('watermarkTextb');
             const watermarkc = document.getElementById('watermarkTextc');
-
             $("#fw").text(generateRandomString(14));
-
             var currentDate = new Date();
             var hours = ("0" + currentDate.getHours()).slice(-2);
             var minutes = ("0" + currentDate.getMinutes()).slice(-2);
             var formattedTime = hours + ":" + minutes;
             $("#time").text(formattedTime);
             $("#watermarkInputa").val(formattedTime);
-
             var days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
             var currentDate = new Date();
             var year = currentDate.getFullYear();
@@ -115,7 +114,6 @@
             $("#watermarkTextc").text(formattedDate);
             $("#watermarkInputb").val('广东省广州市白云区龙井西路4号');
             $("#watermarkInputc").val(formattedDate);
-            
             $('#startCamera').click(function () {
                 $('#imageElement').hide();
                 $('#videoElement').show();
@@ -131,7 +129,6 @@
                     });
                 }
             });
-
             $('#uploadImage').change(function (event) {
                 $('#videoElement').hide();
                 $('#imageElement').show();
@@ -142,17 +139,12 @@
                 }
                 reader.readAsDataURL(file);
             });
-
             $('#updateWatermark').click(function () {
                 watermarka.textContent = $('#watermarkInputa').val();
                 watermarkb.textContent = $('#watermarkInputb').val();
                 watermarkc.textContent = $('#watermarkInputc').val();
                 $("#fw").text(generateRandomString(14));
             });
-
-            setTimeout(function() {
-                $("#startCamera").click();
-            }, 500);
         });
         function generateRandomString(length) {
             const characters = 'ABCDEFGHIJKMNOPQRSTUVWXYZ0123456789';
