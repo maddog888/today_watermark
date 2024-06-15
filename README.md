@@ -11,6 +11,8 @@
 -存储到最近项目  
 -生成之后可以叫Siri运行指令  
 
+
+GitHub 演示：https://maddog888.github.io/today_watermark/  
 演示效果图：  
 
 ![效果图](/ysxg.jpg)
